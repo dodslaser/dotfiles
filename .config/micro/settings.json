@@ -2,11 +2,12 @@
     "autosu": true,
     "colorscheme": "dracula",
     "diffgutter": true,
+    "lsp.server": "python=pylsp={\"pylsp.plugins.black.enabled\":true}",
     "savecursor": true,
     "saveundo": true,
     "scrollbar": true,
     "softwrap": true,
-    "wordwrap": true,
     "tabmovement": true,
-    "tabstospaces": true
+    "tabstospaces": true,
+    "wordwrap": true
 }

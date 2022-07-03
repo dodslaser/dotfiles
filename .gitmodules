@@ -1,3 +1,6 @@
 [submodule ".submodules/dracula/micro"]
 	path = .submodules/dracula/micro
 	url = https://github.com/dracula/micro.git
+[submodule ".config/micro/plug/lsp"]
+	path = .config/micro/plug/lsp
+	url = https://github.com/AndCake/micro-plugin-lsp.git
