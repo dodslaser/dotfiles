@@ -13,6 +13,9 @@ shopt -s histappend
 export HISTCONTROL=ignoredups
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
+# Add ~/.local/bin to PATH
+export PATH="${PATH}:${HOME}/.local/bin"
+
 # Alias/Function definitions
 alias ls="ls --color=auto"
 alias mv="mv -i"
