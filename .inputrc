@@ -1,0 +1,16 @@
+set completion-ignore-case on
+set visible-stats on
+set skip-completed-text on
+set input-meta on
+set output-meta on
+set convert-meta off
+set show-all-if-ambiguous on
+set colored-stats On
+set visible-stats On
+set mark-symlinked-directories On
+set colored-completion-prefix On
+set menu-complete-display-prefix On
+
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[3;3~": kill-word
