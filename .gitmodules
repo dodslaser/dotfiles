@@ -1,0 +1,3 @@
+[submodule ".submodules/dracula/micro"]
+	path = .submodules/dracula/micro
+	url = https://github.com/dracula/micro.git

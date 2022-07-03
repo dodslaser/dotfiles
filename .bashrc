@@ -1,6 +1,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Set truecolor mode for micro
+export MICRO_TRUECOLOR=1
+
 # Case/typo insensitive glob
 shopt -s nocaseglob
 shopt -s cdspell
