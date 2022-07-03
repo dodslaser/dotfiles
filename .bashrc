@@ -33,10 +33,10 @@ if [[ -d /usr/share/bash-completion ]]; then
     source /usr/share/bash-completion/bash_completion
 fi
 
+# Local overrides
+source "${HOME}/.bashrc_local"
+
 # Load starship prompt if available
 if which starship >/dev/null 2>&1; then
     eval "$(starship init bash)"
 fi
-
-# Local overrides
-source .bashrc_local
