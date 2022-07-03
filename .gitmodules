@@ -4,3 +4,4 @@
 [submodule ".config/micro/plug/lsp"]
 	path = .config/micro/plug/lsp
 	url = https://github.com/AndCake/micro-plugin-lsp.git
+	branch = bug/initialization-option-parsing
