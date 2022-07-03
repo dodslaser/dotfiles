@@ -32,12 +32,14 @@ if [[ -d "/usr/share/fzf" ]]; then
 fi
 
 # Load bash-completion if available
-if [[ -d /usr/share/bash-completion ]]; then
-    source /usr/share/bash-completion/bash_completion
+if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
+    source "/usr/share/bash-completion/bash_completion"
 fi
 
 # Local overrides
-source "${HOME}/.bashrc_local"
+if [[ -f "${HOME}/.bashrc_local" ]]; then
+    source "${HOME}/.bashrc_local"
+fi
 
 # Load starship prompt if available
 if which starship >/dev/null 2>&1; then
