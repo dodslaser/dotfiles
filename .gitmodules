@@ -7,6 +7,3 @@
 [submodule ".submodules/nano/highlighting"]
     path = .submodules/nano/highlighting
     url = https://github.com/scopatz/nanorc.git
-[submodule ".submodules/bash/completion"]
-    path = .submodules/bash/completion
-    url = https://github.com/scop/bash-completion.git
