@@ -9,5 +9,4 @@ set softwrap
 set atblanks
 set tabsize 4
 set tabstospaces
-set mouse
 set nohelp
