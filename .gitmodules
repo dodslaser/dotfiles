@@ -5,3 +5,6 @@
 	path = .config/micro/plug/lsp
 	url = https://github.com/AndCake/micro-plugin-lsp.git
 	branch = bug/initialization-option-parsing
+[submodule ".submodules/nano/highlighting"]
+	path = .submodules/nano/highlighting
+	url = https://github.com/scopatz/nanorc.git
