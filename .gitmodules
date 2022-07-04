@@ -1,10 +1,12 @@
 [submodule ".submodules/dracula/micro"]
-	path = .submodules/dracula/micro
-	url = https://github.com/dracula/micro.git
+    path = .submodules/dracula/micro
+    url = https://github.com/dracula/micro.git
 [submodule ".config/micro/plug/lsp"]
-	path = .config/micro/plug/lsp
-	url = https://github.com/AndCake/micro-plugin-lsp.git
-	branch = bug/initialization-option-parsing
+    path = .config/micro/plug/lsp
+    url = https://github.com/AndCake/micro-plugin-lsp.git
 [submodule ".submodules/nano/highlighting"]
-	path = .submodules/nano/highlighting
-	url = https://github.com/scopatz/nanorc.git
+    path = .submodules/nano/highlighting
+    url = https://github.com/scopatz/nanorc.git
+[submodule ".submodules/bash/completion"]
+    path = .submodules/bash/completion
+    url = https://github.com/scop/bash-completion.git
