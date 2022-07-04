@@ -32,11 +32,16 @@ alias .dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles/ --work-tree=${HOME}"
 if [[ -d "/usr/share/fzf" ]]; then
     source /usr/share/fzf/key-bindings.bash
     source /usr/share/fzf/completion.bash
+elif [[ -r "/usr/local/opt/fzf/shell/completion.bash" ]]; then
+    source "/usr/local/opt/fzf/shell/completion.bash"
 fi
 
 # Load bash-completion if available
 if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
     source "/usr/share/bash-completion/bash_completion"
+elif [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+    export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+    source "/usr/local/etc/profile.d/bash_completion.sh"
 fi
 
 # Local overrides
