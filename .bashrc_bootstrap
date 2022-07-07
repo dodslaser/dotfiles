@@ -1,94 +1,71 @@
 #!/bin/bash
 
-_dlscheme=()
-brew -v &> /dev/null && _dlscheme+=( "brew" )
-(pacman -V && sudo -V) &> /dev/null && _dlscheme+=( "pacman" )
-curl -V &> /dev/null && _dlscheme+=( "raw::curl -fsSL;;" )
-wget -V &> /dev/null && _dlscheme+=( "raw::wget -qO -;;" )
+if curl -V &> /dev/null; then 
+    _dlcmd="curl -fsSL"
+elif wget -V &> /dev/null; then
+    _dlcmd="wget -qO -"
+fi
 
 get_micro () {
     echo "Installing micro..."
-    case " ${_dlscheme} " in
-        *" brew "*)
-            brew install micro;;
-        *" raw::"*)
-            _dlcmd=$(sed -E "s/raw::([^;]*);;.*/\1/" <<< "${_dlscheme}")
-            mkdir -p "${HOME}/.local/bin/"
-            pushd "${HOME}/.local/bin/"
-            bash <(${_dlcmd} "https://getmic.ro")
-            popd
-            ;;
-        *)
-            echo "No download method available for micro";;
-    esac
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _installer="https://getmic.ro"
+        mkdir -p "${HOME}/.local/bin/"
+        pushd "${HOME}/.local/bin/"
+            bash <(${_dlcmd} "${_installer}")
+        popd
+    else
+        echo "No download method available"
+    fi
 }
 
 get_bash_completion () {
     echo "Installing bash-completion..."
-    case " ${_dlscheme[@]} " in
-        *" brew "*)
-            brew install bash-completion@2;;
-        *" pacman "*)
-            sudo pacman -Syy --noconfirm bash-completion;;
-        *" raw::"*)
-            _release="https://github.com/scop/bash-completion/releases/download/2.11/bash-completion-2.11.tar.xz"
-            _dlcmd=$(sed -E "s/raw::([^;]*);;.*/\1/" <<< "${_dlscheme}")
-            tar -xJf <(${_dlcmd} "${_release}") -C "/tmp" &&
-            pushd "/tmp/$(basename ${_release} .tar.xz)" &&
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _release="https://github.com/scop/bash-completion/releases/download/2.11/bash-completion-2.11.tar.xz"
+        tar -xJf <(${_dlcmd} "${_release}") -C "/tmp" &&
+        pushd "/tmp/$(basename ${_release} .tar.xz)" &&
             ./configure &&
             make prefix="${HOME}/.local" &&
             make prefix="${HOME}/.local" install
-            popd
-            rm -rf "/tmp/$(basename ${_release} .tar.xz)"
-            ;;
-        *)
-            echo "No download method available for bash-completion";;
-    esac 
+        popd
+        rm -rf "/tmp/$(basename ${_release} .tar.xz)"
+    else
+        echo "No download method available"
+    fi
 }
 
 get_starship () {
     echo "Installing starship..."
-    case " ${_dlscheme} " in
-        *" brew "*)
-            brew install starship;;
-        *" pacman "*)
-            sudo pacman -Syy --noconfirm starship;;
-        *" raw::"*)
-            _dlcmd=$(sed -E "s/raw::([^;]*);;.*/\1/" <<< "${_dlscheme}")
-            mkdir -p "${HOME}/.local/bin/"
-            sh <(${_dlcmd} "https://starship.rs/install.sh") -y -b "${HOME}/.local/bin"
-            ;;
-        *)
-            echo "No download method available for starship";;
-    esac
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _installer="https://starship.rs/install.sh"
+        mkdir -p "${HOME}/.local/bin/"
+        sh <(${_dlcmd} "${_installer}") \
+            --bin-dir "${HOME}/.local/bin" \
+            --yes
+    else
+        echo "No download method available"
+    fi
 }
 
 get_fzf () {
     echo "Installing fzf..."
-    case " ${_dlscheme} " in
-        *" brew "*)
-            brew install fzf;;
-        *" pacman "*)
-            sudo pacman -Syy --noconfirm fzf;;
-        *" raw::"*)
-            _dlcmd=$(sed -E "s/raw::([^;]*);;.*/\1/" <<< "${_dlscheme}")
-            _installer="https://raw.githubusercontent.com/junegunn/fzf/master/install"
-            _completion="https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.bash"
-            mkdir -p "${HOME}/.local/bin/"
-            mkdir -p "${HOME}/.local/shell/fzf"
-            ${_dlcmd} "${_completion}" > "${HOME}/.local/shell/fzf/completion.bash"
-            ${_dlcmd} "${_installer}" > "${HOME}/.local/install_fzf" &&
-            pushd "${HOME}/.local" &&
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _completion="https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.bash"
+        _installer="https://raw.githubusercontent.com/junegunn/fzf/master/install"
+        mkdir -p "${HOME}/.local/bin/"
+        mkdir -p "${HOME}/.local/shell/fzf"
+        ${_dlcmd} "${_completion}" > "${HOME}/.local/shell/fzf/completion.bash"
+        ${_dlcmd} "${_installer}" > "${HOME}/.local/install_fzf" &&
+        pushd "${HOME}/.local" &&
             bash ./install_fzf \
                 --bin \
                 --no-update-rc \
                 --no-zsh \
                 --no-key-bindings
-            popd
-            rm -f "${HOME}/.local/install_fzf"
-
-            ;;
-        *)
-            echo "No download method available for fzf";;
-    esac
+        popd
+        rm -f "${HOME}/.local/install_fzf"
+    else
+        echo "No download method available"
+    fi
 }

@@ -35,28 +35,53 @@ alias cpr="rsync -ah --progress"
 alias cget="curl -LOC -"
 alias .dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles/ --work-tree=${HOME}"
 
-# Load fzf if available
-if [[ -d "/usr/share/fzf" ]]; then
-    source /usr/share/fzf/key-bindings.bash
-    source /usr/share/fzf/completion.bash
+# Load functions for installing utils
+source "${HOME}/.bashrc_bootstrap"
+
+# Load system-wide fzf if available
+if [[ -r "/usr/share/fzf/completion.bash" ]]; then
+    source "/usr/share/fzf/completion.bash"
 elif [[ -r "/usr/local/opt/fzf/shell/completion.bash" ]]; then
     source "/usr/local/opt/fzf/shell/completion.bash"
+else
+    # install fzf in user-home
+    if [[ -r "${HOME}/.local/shell/fzf/completion.bash" ]]; then
+        source "${HOME}/.local/shell/fzf/completion.bash"
+    elif ! (get_fzf && source "/usr/share/fzf/completion.bash"); then
+        echo "Unable to install/load fzf"
+    fi
 fi
 
-# Load bash-completion if available
+# Load system-wide bash-completion if available
 if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
     source "/usr/share/bash-completion/bash_completion"
 elif [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
     export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
     source "/usr/local/etc/profile.d/bash_completion.sh"
+else
+    # install bash-completion in user-home
+    if [[ -r "${HOME}/.local/share/bash_completion" ]]; then
+        source "${HOME}/.local/share/bash_completion"
+    elif ! (get_bash_completion && source "${HOME}/.local/share/bash_completion"); then
+        echo "Unable to install/load bash-completion"
+    fi
 fi
+
 
 # Local overrides
 if [[ -f "${HOME}/.bashrc_local" ]]; then
     source "${HOME}/.bashrc_local"
 fi
 
+
 # Load starship prompt if available
-if which starship >/dev/null 2>&1; then
+if starship -V &>/dev/null; then
     eval "$(starship init bash)"
+else
+    # install starship in user-home
+    if [[ -r "${HOME}/.local/share/bash_completion" ]]; then
+        eval "$(${HOME}/.local/bin/starship init bash)"
+    elif ! (get_starship && eval "$(${HOME}/.local/bin/starship init bash)"); then
+        echo "Unable to install/load starship"
+    fi
 fi
