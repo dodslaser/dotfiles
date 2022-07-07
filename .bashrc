@@ -45,13 +45,11 @@ elif [[ -r "/usr/local/opt/fzf/shell/completion.bash" ]]; then
     source "/usr/local/opt/fzf/shell/completion.bash"
 else
     # install fzf in user-home
-    if [[ -r "${HOME}/.local/shell/fzf/completion.bash" ]]; then
-        source "${HOME}/.local/shell/fzf/completion.bash"
-    elif get_fzf; then
-        source "/usr/share/fzf/completion.bash"
-    else
+    [[ -r "${HOME}/.local/shell/fzf/completion.bash" ]] &&
+    [[ -r "${HOME}/.local/bin/fzf" ]] ||
+        get_fzf &>/dev/null
+    source "${HOME}/.local/shell/fzf/completion.bash" ||
         echo "Unable to install/load fzf"
-    fi
 fi
 
 # Load system-wide bash-completion if available
@@ -62,13 +60,10 @@ elif [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
     source "/usr/local/etc/profile.d/bash_completion.sh"
 else
     # install bash-completion in user-home
-    if [[ -r "${HOME}/.local/share/bash_completion" ]]; then
-        source "${HOME}/.local/share/bash_completion"
-    elif get_bash_completion; then
-        source "${HOME}/.local/share/bash_completion"
-    else
+    [[ -r "${HOME}/.local/etc/profile.d/bash_completion.sh" ]] ||
+        get_bash_completion &> /dev/null
+    source "${HOME}/.local/etc/profile.d/bash_completion.sh" ||
         echo "Unable to install/load bash-completion"
-    fi
 fi
 
 
@@ -83,11 +78,8 @@ if starship -V &>/dev/null; then
     eval "$(starship init bash)"
 else
     # install starship in user-home
-    if [[ -r "${HOME}/.local/share/bash_completion" ]]; then
-        eval "$(${HOME}/.local/bin/starship init bash)"
-    elif get_starship: then
-        eval "$(${HOME}/.local/bin/starship init bash)")
-    else
+    [[ -r "${HOME}/.local/share/bash_completion" ]] ||
+        get_starship &>/dev/null
+    eval "$(${HOME}/.local/bin/starship init bash)" ||
         echo "Unable to install/load starship"
-    fi
 fi

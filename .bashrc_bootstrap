@@ -7,20 +7,16 @@ elif wget -V &> /dev/null; then
 fi
 
 get_micro () {
-    echo "Installing micro..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _installer="https://getmic.ro"
         mkdir -p "${HOME}/.local/bin/"
         pushd "${HOME}/.local/bin/"
             bash <(${_dlcmd} "${_installer}")
         popd
-    else
-        echo "No download method available"
     fi
 }
 
 get_bash_completion () {
-    echo "Installing bash-completion..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _release="https://github.com/scop/bash-completion/releases/download/2.11/bash-completion-2.11.tar.xz"
         tar -xJf <(${_dlcmd} "${_release}") -C "/tmp" &&
@@ -29,14 +25,11 @@ get_bash_completion () {
             make prefix="${HOME}/.local" &&
             make prefix="${HOME}/.local" install
         popd
-        rm -rf "/tmp/$(basename ${_release} .tar.xz)"
-    else
-        echo "No download method available"
+        /bin/rm -rf "/tmp/$(basename ${_release} .tar.xz)"
     fi
 }
 
 get_starship () {
-    echo "Installing starship..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _installer="https://starship.rs/install.sh"
         mkdir -p "${HOME}/.local/bin/"
@@ -49,7 +42,6 @@ get_starship () {
 }
 
 get_fzf () {
-    echo "Installing fzf..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _completion="https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.bash"
         _installer="https://raw.githubusercontent.com/junegunn/fzf/master/install"
@@ -64,8 +56,6 @@ get_fzf () {
                 --no-zsh \
                 --no-key-bindings
         popd
-        rm -f "${HOME}/.local/install_fzf"
-    else
-        echo "No download method available"
+        /bin/rm -f "${HOME}/.local/install_fzf"
     fi
 }
