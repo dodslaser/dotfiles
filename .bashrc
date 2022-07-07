@@ -21,10 +21,17 @@ alias ls="ls --color=auto"
 alias mv="mv -i"
 alias cp="cp -i"
 alias ln="ln -i"
-alias rm="rm -I --preserve-root"
-alias psm="ps ax eo user,comm,pmem,size k pmem"
-alias psc="ps ax Seo user,comm,pcpu k pcpu"
-alias cpr="rsync -ah --info=progress2"
+alias rm="rm -I"
+
+if [[ $(uname) == "Linux" ]]; then
+    alias psm="ps axeo user,comm,pmem,size k pmem"
+    alias psc="ps axeo user,comm,pcpu k pcpu"
+elif [[ $(uname) == "Darwin" ]]; then
+    alias psm="ps axeo user,comm,pmem | (read -r; printf "%s\n" "$REPLY"; sort -nk3)"
+    alias psc="ps axeo user,comm,pcpu | (read -r; printf "%s\n" "$REPLY"; sort -nk3)"
+fi
+
+alias cpr="rsync -ah --progress"
 alias cget="curl -LOC -"
 alias .dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles/ --work-tree=${HOME}"
 
