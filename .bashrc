@@ -47,7 +47,9 @@ else
     # install fzf in user-home
     if [[ -r "${HOME}/.local/shell/fzf/completion.bash" ]]; then
         source "${HOME}/.local/shell/fzf/completion.bash"
-    elif ! (get_fzf && source "/usr/share/fzf/completion.bash"); then
+    elif get_fzf; then
+        source "/usr/share/fzf/completion.bash"
+    else
         echo "Unable to install/load fzf"
     fi
 fi
@@ -62,7 +64,9 @@ else
     # install bash-completion in user-home
     if [[ -r "${HOME}/.local/share/bash_completion" ]]; then
         source "${HOME}/.local/share/bash_completion"
-    elif ! (get_bash_completion && source "${HOME}/.local/share/bash_completion"); then
+    elif get_bash_completion; then
+        source "${HOME}/.local/share/bash_completion"
+    else
         echo "Unable to install/load bash-completion"
     fi
 fi
@@ -81,7 +85,9 @@ else
     # install starship in user-home
     if [[ -r "${HOME}/.local/share/bash_completion" ]]; then
         eval "$(${HOME}/.local/bin/starship init bash)"
-    elif ! (get_starship && eval "$(${HOME}/.local/bin/starship init bash)"); then
+    elif get_starship: then
+        eval "$(${HOME}/.local/bin/starship init bash)")
+    else
         echo "Unable to install/load starship"
     fi
 fi
