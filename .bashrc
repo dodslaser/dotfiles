@@ -3,6 +3,7 @@
 
 # Set truecolor mode for micro
 export MICRO_TRUECOLOR=1
+export COLORTERM=truecolor
 
 # Case/typo insensitive glob
 shopt -s nocaseglob
