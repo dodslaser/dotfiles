@@ -39,11 +39,6 @@ alias .dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles/ --work-tree=${HOME}"
 # Load functions for installing utils
 source "${HOME}/.bashrc_bootstrap"
 
-# Setup homebrew environment if available
-if [[ -r "/opt/homebrew/bin/brew" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-fiœ
-
 # Load system-wide fzf if available
 if [[ -r "/usr/share/fzf/completion.bash" ]]; then
     source "/usr/share/fzf/completion.bash"
@@ -59,25 +54,29 @@ else
 fi
 
 # Load system-wide bash-completion if available
+if [[ -d "/opt/homebrew/etc/bash_completion.d" ]]; then
+    export BASH_COMPLETION_COMPAT_DIR="/opt/homebrew/etc/bash_completion.d"
+elif [[ -d "/usr/local/etc/bash_completion.d"  ]]; then
+    export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
+fi
+
 if [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
     source "/usr/share/bash-completion/bash_completion"
-elif [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-    export BASH_COMPLETION_COMPAT_DIR="/usr/local/etc/bash_completion.d"
-    source "/usr/local/etc/profile.d/bash_completion.sh"
+elif [[ -r "/usr/local/share/bash-completion/bash_completion" ]]; then
+    source "/usr/local/share/bash-completion/bash_completion"
 else
     # install bash-completion in user-home
-    [[ -r "${HOME}/.local/etc/profile.d/bash_completion.sh" ]] ||
+    [[ -r "${HOME}/.local/share/bash-completion/bash_completion" ]] ||
         get_bash_completion &> /dev/null
-    source "${HOME}/.local/etc/profile.d/bash_completion.sh" ||
+    source "${HOME}/.local/share/bash-completion/bash_completion" ||
         echo "Unable to install/load bash-completion"
 fi
 
+# Setup homebrew environment if available
+[[ -r "/opt/homebrew/bin/brew" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Local overrides
-if [[ -f "${HOME}/.bashrc_local" ]]; then
-    source "${HOME}/.bashrc_local"
-fi
-
+[[ -f "${HOME}/.bashrc_local" ]] && source "${HOME}/.bashrc_local"
 
 # Load starship prompt if available
 if starship -V &>/dev/null; then
