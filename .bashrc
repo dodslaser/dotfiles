@@ -39,6 +39,11 @@ alias .dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles/ --work-tree=${HOME}"
 # Load functions for installing utils
 source "${HOME}/.bashrc_bootstrap"
 
+# Setup homebrew environment if available
+if [[ -r "/opt/homebrew/bin/brew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fiœ
+
 # Load system-wide fzf if available
 if [[ -r "/usr/share/fzf/completion.bash" ]]; then
     source "/usr/share/fzf/completion.bash"
