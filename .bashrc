@@ -47,8 +47,10 @@ elif [[ -r "/usr/local/opt/fzf/shell/completion.bash" ]]; then
 else
     # install fzf in user-home
     [[ -r "${HOME}/.local/shell/fzf/completion.bash" ]] &&
+    [[ -r "${HOME}/.local/shell/fzf/key-bindings.bash" ]] &&
     [[ -r "${HOME}/.local/bin/fzf" ]] ||
         get_fzf &>/dev/null
+    source "${HOME}/.local/shell/fzf/key-bindings.bash" &&
     source "${HOME}/.local/shell/fzf/completion.bash" ||
         echo "Unable to install/load fzf"
 fi
