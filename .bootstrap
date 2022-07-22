@@ -1,0 +1,98 @@
+#!/bin/zsh
+
+if brew -v &> /dev/null; then
+    _brewcmd=brew
+fi
+ 
+if curl -V &> /dev/null; then 
+    _dlcmd="curl -fsSL"
+elif wget -V &> /dev/null; then
+    _dlcmd="wget -qO -"
+fi
+
+bootstrap::get_micro () {
+    echo "Installing micro to ${HOME}/.local/bin ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _installer="https://getmic.ro"
+        (
+            mkdir -p "${HOME}/.local/bin/" &&
+            cd "${HOME}/.local/bin/" &&
+            sh <(eval "${_dlcmd} ${_installer}")
+        ) &>/dev/null || echo "Unable to install micro"
+    else
+        echo "No download method available"
+    fi
+}
+
+bootstrap::get_starship () {
+    echo "Installing starship to ${HOME}/.local/bin ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _installer="https://starship.rs/install.sh"
+        (
+            mkdir -p "${HOME}/.local/bin/" &&
+            sh <(eval "${_dlcmd} ${_installer}") --bin-dir "${HOME}/.local/bin" --yes
+        ) &>/dev/null || echo "Unable to install starship"
+    else
+        echo "No download method available"
+    fi
+}
+
+bootstrap::get_fzf () {
+    echo "Installing fzf to ${HOME}/.fzf ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _release="https://github.com/junegunn/fzf/archive/refs/tags/0.31.0.tar.gz"
+        (
+            mkdir -p "${HOME}/.fzf" &&
+            tar -xjf <(eval "${_dlcmd} ${_release}") --exclude "src" --strip 1 -C "${HOME}/.fzf" &&
+            ${HOME}/.fzf/install --all --no-update-rc &&
+            ln -sf "${HOME}/.fzf/bin/fzf" "${HOME}/.local/bin/fzf" 
+        ) &>/dev/null || echo "Unable to install fzf"
+    else
+        echo "No download method available"
+    fi
+    
+}
+
+bootstrap::get_pass () {
+    echo "Installing pass ..."
+    if  [[ "$(uname -s)" == "Darwin" ]]; then
+        echo "MacOS detected, using homebrew ..."
+        brew install pass &> /dev/null || echo "Unable to install pass using homebrew"
+    elif ! [[ -z "${_dlcmd}" ]]; then
+        _release="https://git.zx2c4.com/password-store/snapshot/password-store-1.7.4.tar.xz"
+        _tmpdir=$(mktemp -d)
+        (
+            mkdir -p "${HOME}/.local/{bin,lib,share/man}" &&
+            tar -xJf <(eval "${_dlcmd} ${_release}") --strip 1 -C "$_tmpdir" &&
+            cd "$_tmpdir" &&
+            make PREFIX="$HOME/.local" install
+        ) || echo "Unable to install pass"
+        /bin/rm -r "$_tmpdir"
+    else
+        echo "No download method available"
+    fi
+}
+
+bootstrap::get_omz () {
+    echo "Installing oh-my-zsh ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _installer="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+        (
+           sh <(eval "${_dlcmd} ${_installer}") --unattended --keep-zshrc --skip-chsh
+        ) || echo "Unable to install oh-my-zsh"
+    else
+        echo "No download method available"
+    fi
+}
+
+bootstrap::get_homebrew () {
+    echo "Installing homebrew ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _installer="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+        (
+           bash <(eval "${_dlcmd} ${_installer}")
+        ) || echo "Unable to install homebrew"
+    else
+        echo "No download method available"
+    fi
+}
