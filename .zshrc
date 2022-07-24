@@ -36,8 +36,6 @@ setopt hist_ignore_all_dups
 # DISABLE_MAGIC_FUNCTIONS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HYPHEN_INSENSITIVE="true"
-# ZSH_TMUX_AUTOSTART="true"
-ZSH_TMUX_CONFIG="${HOME}/.config/tmux/tmux.conf"
 
 plugins=(
     colored-man-pages
@@ -48,7 +46,6 @@ plugins=(
     brew
     pip
     python
-    tmux
     zsh-syntax-highlighting
 )
 
@@ -59,6 +56,6 @@ plugins=(
 source "${HOME}/.bootstrap"
 micro --version &> /dev/null || bootstrap::get_micro
 fzf --version &>/dev/null || bootstrap::get_fzf
-source "${ZSH}/oh-my-zsh.sh" || bootstrap::get_omz
+source "${ZSH}/oh-my-zsh.sh"
 # This line MUST always be last
 starship -V &>/dev/null || bootstrap::get_starship && eval "$(starship init zsh)" 
