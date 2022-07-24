@@ -1,0 +1,1 @@
+/home/erik/.submodules/dracula/wezterm/dracula.lua
