@@ -26,17 +26,18 @@ elif [[ $(uname) == "Darwin" ]]; then
     
 fi
 
-zstyle ':omz:update' mode reminder
-zstyle ':omz:update' frequency 13
+zstyle ":omz:update" mode reminder
+zstyle ":omz:update" frequency 13
 setopt extended_history
 setopt share_history
 setopt hist_ignore_all_dups
 
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
-COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HYPHEN_INSENSITIVE="true"
+# ZSH_TMUX_AUTOSTART="true"
+ZSH_TMUX_CONFIG="${HOME}/.config/tmux/tmux.conf"
 
 plugins=(
     colored-man-pages
@@ -47,6 +48,8 @@ plugins=(
     brew
     pip
     python
+    tmux
+    zsh-syntax-highlighting
 )
 
 # Check for local overrides
