@@ -4,12 +4,6 @@
 [submodule ".submodules/nano/highlighting"]
     path = .submodules/nano/highlighting
     url = https://github.com/scopatz/nanorc.git
-[submodule ".submodules/dracula/alacritty"]
-	path = .submodules/dracula/alacritty
-	url = https://github.com/dracula/alacritty.git
-[submodule ".submodules/tmux/tpm"]
-	path = .submodules/tmux/tpm
-	url = https://github.com/tmux-plugins/tpm
 [submodule ".submodules/dracula/wezterm"]
 	path = .submodules/dracula/wezterm
 	url = https://github.com/dracula/wezterm.git
