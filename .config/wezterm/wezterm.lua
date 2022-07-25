@@ -3,7 +3,6 @@ local wezterm = require 'wezterm'
 
 return {
     font_size = 11,
-    font_antialias = "Subpixel",
     font = wezterm.font_with_fallback {
       'MesloLGS Nerd Font Mono',
       'monospace'
