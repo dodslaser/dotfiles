@@ -57,8 +57,10 @@ setopt hist_ignore_all_dups
 # DISABLE_MAGIC_FUNCTIONS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HYPHEN_INSENSITIVE="true"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 plugins=(
+    zsh-autosuggestions
     colored-man-pages
     fzf
     gh

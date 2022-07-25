@@ -1,13 +1,31 @@
-local dracula = require 'dracula'
 local wezterm = require 'wezterm'
+local gui = wezterm.gui
+local dracula_custom, _ = wezterm.color.load_scheme(
+    wezterm.config_dir .. '/colors/dracula.toml'
+)
+dracula_custom.selection_fg = '#282a36'
+dracula_custom.selection_bg = '#f8f8f2'
+
+if gui
+then
+    if(gui.screens()['main']['height'] > 1440)
+    then
+        font_size = 11
+    else
+        font_size = 10
+    end
+end
 
 return {
-    font_size = 11,
+    font_size = font_size,
     font = wezterm.font_with_fallback {
       'MesloLGS Nerd Font Mono',
       'monospace'
     },
-    colors = dracula,
+    color_schemes = {
+        ['Dracula (Custom)'] = dracula_custom,
+    },
+    color_scheme = 'Dracula (Custom)',
     enable_scroll_bar = true,
     tab_bar_at_bottom = true,
     use_fancy_tab_bar = false,
