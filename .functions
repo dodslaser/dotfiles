@@ -3,9 +3,9 @@
 source ~/.bootstrap
 
 _mpv () {
-    grep -q vo-sixel <(mpv --list-properties) || bootstrap::get_mpv
+    grep -q vo-sixel <(mpv --list-properties 2>&1) || bootstrap::get_mpv
     echo "Loading video stream ..."
-    mpv --really-quiet --vo=sixel $*
+    mpv --really-quiet --vo=sixel $@
 }
 
 functions::svt () {
@@ -19,17 +19,24 @@ functions::svt () {
 }
 
 functions::youtube () {
-    yt-dlp --version &> /dev/null || bootstrap::get_yt_dlp
-    local _re_id="(https?://)?(www\.|m\.)?(youtube(-nocookie)?\.com/|youtu\.be/)?(watch\?v=|v/|embed/)?\K.*"
-    local _url="https://youtu.be/"$(grep -oP "${_re_id}" <<< ${1})
-    local _h=$(sed -n -E "s,.*h([<>]?=[0-9]+).*,[height\1],p" <<< $@)
-    local _w=$(sed -n -E "s,.*w([<>]?=[0-9]+).*,[width\1],p" <<< $@)
-    local _fps=$(sed -n -E "s,.*(fps[<>]?=[0-9]+).*,[\1],p" <<< $@) 
-    if ! [[ -z "${_h}${_w}${_fps}" ]]; then
-        local _ytdl_fmt="bestvideo$_h$_v$_fps+bestaudio"
+    local _search=$(grep -oP "^s=\K.*" <<< $@)
+    if [[ -z "${_search}" ]]; then
+        yt-dlp --version &> /dev/null || bootstrap::get_yt_dlp
+        local _re_id="(https?://)?(www\.|m\.)?(youtube(-nocookie)?\.com/|youtu\.be/)?(watch\?v=|v/|embed/)?\K.*"
+        local _url="https://youtu.be/"$(grep -oP "${_re_id}" <<< ${1})
+        local _h=$(sed -n -E "s,.*h([<>]?=[0-9]+).*,[height\1],p" <<< $@)
+        local _w=$(sed -n -E "s,.*w([<>]?=[0-9]+).*,[width\1],p" <<< $@)
+        local _fps=$(sed -n -E "s,.*(fps[<>]?=[0-9]+).*,[\1],p" <<< $@) 
+        if ! [[ -z "${_h}${_w}${_fps}" ]]; then
+            local _ytdl_fmt="bestvideo$_h$_v$_fps+bestaudio"
+        else
+            local _ytdl_fmt="best"
+        fi
+        _mpv --script-opts=ytdl_hook-ytdl_path=yt-dlp --ytdl-format="$_ytdl_fmt" "$_url"
     else
-        local _ytdl_fmt="best"
+        ytfzf --version || bootstrap::get_ytfzf
+        grep -q vo-sixel <(mpv --list-properties) || bootstrap::get_mpv
+        ytfzf --url-handler-opts="--vo=sixel --really-quiet" "${_search}"
     fi
-    _mpv --script-opts=ytdl_hook-ytdl_path=yt-dlp --ytdl-format="$_ytdl_fmt" "$_url"
 
 } 
