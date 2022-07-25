@@ -5,6 +5,10 @@ export MICRO_TRUECOLOR=1
 export COLORTERM=truecolor
 
 # Alias/Function definitions
+source ~/.functions
+alias svt="functions::svt"
+alias yt="functions::youtube"
+
 alias ls="ls --color=auto"
 alias mv="mv -i"
 alias cp="cp -i"

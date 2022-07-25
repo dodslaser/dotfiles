@@ -96,3 +96,65 @@ bootstrap::get_homebrew () {
         echo "No download method available"
     fi
 }
+
+bootstrap::get_mpv () {
+    echo "Installing mpv ..."
+        if ! [[ -z "${_dlcmd}" ]]; then
+            _mpv_release="https://github.com/mpv-player/mpv/archive/refs/tags/v0.34.1.tar.gz"
+            _libsixel_release="https://github.com/saitoha/libsixel/releases/download/v1.8.6/libsixel-1.8.6.tar.gz"
+            _tmpdir=$(mktemp -d)
+            _build_libs="${_tmpdir}/build-libs"
+            _pkgconfig="${_build_libs}/lib/pkgconfig"
+            (   
+                export PKG_CONFIG_PATH="${_pkgconfig}:${PKG_CONFIG_PATH}" 
+
+                mkdir -p "${_tmpdir}/libsixel" &&
+                mkdir -p "${HOME}/.local/bin" &&
+                (
+                    tar -xzf <(eval "${_dlcmd} ${_mpv_release}") --strip 1 -C "${_tmpdir}" &
+                    tar -xzf <(eval "${_dlcmd} ${_libsixel_release}") --strip 1 -C "${_tmpdir}/libsixel"
+                ) &&
+                cd "${_tmpdir}/libsixel" &&
+                ./configure --enable-static=yes --enable-shared=no --with-libcurl=no &&
+                make -j $(nproc) &&
+                make prefix="${_build_libs}" install &&
+                sed -i -E "s,(^prefix=).*,\1$_build_libs," "${_pkgconfig}/libsixel.pc" &&
+                cd "${_tmpdir}" &&
+                ./bootstrap.py &&
+                ./waf configure --enable-sixel --prefix="${HOME}/.local" &&
+                ./waf build --jobs $(nproc) &&
+                ./waf install
+            ) &> /dev/null || echo "Unable to install mpv"
+            /bin/rm -r "$_tmpdir"
+        else
+            echo "No download method available"
+        fi
+}
+
+bootstrap::get_yt_dlp () {
+    echo "Installing yt-dlp to ${HOME}/.local/bin ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _release="https://github.com/yt-dlp/yt-dlp/releases/download/2022.07.18/yt-dlp"
+        (
+            mkdir -p "${HOME}/.local/bin/" &&
+            eval "${_dlcmd} ${_release} -o ${HOME}/.local/bin/yt-dlp" &&
+            chmod +x "$HOME/.local/bin/yt-dlp"
+        ) &>/dev/null || echo "Unable to install yt-dlp"
+    else
+        echo "No download method available"
+    fi
+}
+
+bootstrap::get_ytfzf () {
+    echo "Installing yt-dlp to ${HOME}/.local/bin ..."
+    if ! [[ -z "${_dlcmd}" ]]; then
+        _release="https://github.com/yt-dlp/yt-dlp/releases/download/2022.07.18/yt-dlp"
+        (
+            mkdir -p "${HOME}/.local/bin/" &&
+            eval "${_dlcmd} ${_release} -o ${HOME}/.local/bin/yt-dlp" &&
+            chmod +x "$HOME/.local/bin/yt-dlp"
+        ) &>/dev/null || echo "Unable to install yt-dlp"
+    else
+        echo "No download method available"
+    fi
+}
