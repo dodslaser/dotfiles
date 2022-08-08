@@ -1,9 +1,6 @@
 [submodule ".submodules/dracula/micro"]
     path = .submodules/dracula/micro
     url = https://github.com/dracula/micro.git
-[submodule ".submodules/nano/highlighting"]
-    path = .submodules/nano/highlighting
-    url = https://github.com/scopatz/nanorc.git
 [submodule ".submodules/dracula/wezterm"]
 	path = .submodules/dracula/wezterm
 	url = https://github.com/dracula/wezterm.git
