@@ -1,16 +1,18 @@
 #!/bin/zsh
 
-if brew -v &> /dev/null; then
-    _brewcmd=brew
-fi
- 
 if curl -V &> /dev/null; then 
     _dlcmd="curl -fsSL"
 elif wget -V &> /dev/null; then
     _dlcmd="wget -qO -"
 fi
 
-bootstrap::get_micro () {
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    _n_cores=$(sysctl -n hw.logicalcpu)
+else
+    _n_cores=$(nproc)
+fi
+
+bootstrap::get_micro () (
     echo "Installing micro to ${HOME}/.local/bin ..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _installer="https://getmic.ro"
@@ -22,9 +24,9 @@ bootstrap::get_micro () {
     else
         echo "No download method available"
     fi
-}
+)
 
-bootstrap::get_starship () {
+bootstrap::get_starship () (
     echo "Installing starship to ${HOME}/.local/bin ..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _installer="https://starship.rs/install.sh"
@@ -35,9 +37,9 @@ bootstrap::get_starship () {
     else
         echo "No download method available"
     fi
-}
+)
 
-bootstrap::get_fzf () {
+bootstrap::get_fzf () (
     echo "Installing fzf to ${HOME}/.fzf ..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _release="https://github.com/junegunn/fzf/archive/refs/tags/0.31.0.tar.gz"
@@ -49,11 +51,10 @@ bootstrap::get_fzf () {
         ) &>/dev/null || echo "Unable to install fzf"
     else
         echo "No download method available"
-    fi
-    
-}
+    fi   
+)
 
-# bootstrap::get_pass () {
+# function  bootstrap::get_pass (
     # echo "Installing pass ..."
     # if  [[ "$(uname -s)" == "Darwin" ]]; then
         # echo "MacOS detected, using homebrew ..."
@@ -71,9 +72,9 @@ bootstrap::get_fzf () {
     # else
         # echo "No download method available"
     # fi
-# }
+# )
 
-bootstrap::get_omz () {
+bootstrap::get_omz () (
     echo "Installing oh-my-zsh ..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _installer="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -83,9 +84,9 @@ bootstrap::get_omz () {
     else
         echo "No download method available"
     fi
-}
+)
 
-bootstrap::get_homebrew () {
+bootstrap::get_homebrew () (
     echo "Installing homebrew ..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _installer="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
@@ -95,9 +96,9 @@ bootstrap::get_homebrew () {
     else
         echo "No download method available"
     fi
-}
+)
 
-bootstrap::get_mpv () {
+bootstrap::get_mpv () (
     echo "Installing mpv ..."
         if ! [[ -z "${_dlcmd}" ]]; then
             _mpv_release="https://github.com/mpv-player/mpv/archive/refs/tags/v0.34.1.tar.gz"
@@ -116,22 +117,22 @@ bootstrap::get_mpv () {
                 ) &&
                 cd "${_tmpdir}/libsixel" &&
                 ./configure --enable-static=yes --enable-shared=no --with-libcurl=no &&
-                make -j $(nproc) &&
+                make -j ${_n_cores} &&
                 make prefix="${_build_libs}" install &&
-                sed -i -E "s,(^prefix=).*,\1$_build_libs," "${_pkgconfig}/libsixel.pc" &&
+                sed -i -E "s,^prefix=.*,prefix=$_build_libs," "${_pkgconfig}/libsixel.pc" &&
                 cd "${_tmpdir}" &&
                 ./bootstrap.py &&
                 ./waf configure --enable-sixel --prefix="${HOME}/.local" &&
-                ./waf build --jobs $(nproc) &&
+                ./waf build --jobs ${_n_cores} &&
                 ./waf install
             ) &> /dev/null || echo "Unable to install mpv"
             /bin/rm -r "$_tmpdir"
         else
             echo "No download method available"
         fi
-}
+)
 
-bootstrap::get_yt_dlp () {
+bootstrap::get_yt_dlp () (
     echo "Installing yt-dlp to ${HOME}/.local/bin ..."
     if ! [[ -z "${_dlcmd}" ]]; then
         _release="https://github.com/yt-dlp/yt-dlp/releases/download/2022.07.18/yt-dlp"
@@ -143,12 +144,12 @@ bootstrap::get_yt_dlp () {
     else
         echo "No download method available"
     fi
-}
+)
 
-bootstrap::get_ytfzf () {
+bootstrap::get_ytfzf () (
     echo "Installing ytfzf ..."
     if ! [[ -z "${_dlcmd}" ]]; then
-        _release="https://github.com/pystardust/ytfzf/archive/refs/tags/v2.4.0.tar.gz"
+        _release="https://github.com/pystardust/ytfzf/archive/refs/tags/v2.4.1.tar.gz"
         _tmpdir=$(mktemp -d)
         (
             mkdir -p "${HOME}/.local/bin" &&
@@ -160,4 +161,4 @@ bootstrap::get_ytfzf () {
     else
         echo "No download method available"
     fi
-}
+)
