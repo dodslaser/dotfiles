@@ -1,0 +1,30 @@
+#!/bin/zsh
+
+source ~/.bootstrap
+
+_mpv () (
+    grep -q vo-sixel <(mpv --list-properties 2>&1) || bootstrap::get_mpv
+    echo "Loading video stream ..."
+    mpv --really-quiet --vo=sixel $@
+)
+
+functions::svt () (
+    _ch=$(sed -n -E "s/^24$/b/; s/^barn$/b/; /[12b]/p" <<< $@)
+
+    if [[ -z $_ch ]]; then
+        echo "Need to specify SVT channel (1, 2, b[arn]|24)"
+    else
+        _mpv "https://svt${_ch}-c.akamaized.net/se/svt${_ch}/master.m3u8"
+    fi
+}
+
+functions::youtube () (
+    yt-dlp --version &> /dev/null || bootstrap::get_yt_dlp
+    ytfzf --version || bootstrap::get_ytfzf        
+    _search=$(sed -nE 's/s=(.*)/\1/p' <<< "$*")
+    if [[ -z "${_search}" ]]; then
+        ytfzf -c U --url-handler-opts="--vo=sixel --really-quiet" "$@"
+    else
+        ytfzf --url-handler-opts="--vo=sixel --really-quiet" "${_search}"
+    fi
+)
