@@ -16,11 +16,11 @@ functions::svt () (
     else
         _mpv "https://svt${_ch}-c.akamaized.net/se/svt${_ch}/master.m3u8"
     fi
-}
+)
 
 functions::youtube () (
     yt-dlp --version &> /dev/null || bootstrap::get_yt_dlp
-    ytfzf --version || bootstrap::get_ytfzf        
+    ytfzf --version || bootstrap::get_ytfzf
     _search=$(sed -nE 's/s=(.*)/\1/p' <<< "$*")
     if [[ -z "${_search}" ]]; then
         ytfzf -c U --url-handler-opts="--vo=sixel --really-quiet" "$@"

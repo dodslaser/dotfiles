@@ -45,13 +45,13 @@ bootstrap::get_fzf () (
         _release="https://github.com/junegunn/fzf/archive/refs/tags/0.31.0.tar.gz"
         (
             mkdir -p "${HOME}/.fzf" &&
-            tar -xjf <(eval "${_dlcmd} ${_release}") --exclude "src" --strip 1 -C "${HOME}/.fzf" &&
+            tar -xzf <(eval "${_dlcmd} ${_release}") --exclude "src" --strip 1 -C "${HOME}/.fzf" &&
             ${HOME}/.fzf/install --all --no-update-rc &&
             ln -sf "${HOME}/.fzf/bin/fzf" "${HOME}/.local/bin/fzf" 
-        ) &>/dev/null || echo "Unable to install fzf"
+        ) || echo "Unable to install fzf"
     else
         echo "No download method available"
-    fi   
+    fi
 )
 
 # function  bootstrap::get_pass (

@@ -47,7 +47,6 @@ plugins=(
     gh
     gitfast
     gitignore
-    brew
     pip
     python
     zsh-syntax-highlighting
