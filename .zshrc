@@ -1,12 +1,27 @@
+if tmux -V &> /dev/null && [[
+    -t 0 &&
+    $- = *i* &&
+    -z "$TMUX" && (
+        $(env) =~ "SSH_CLIENT" ||
+        $(env) =~ "SSH_CONNECTION" || 
+        $(env) =~ "SSH_TTY"
+    )
+]]; then
+    for i in {1..10}; do
+        if ! grep -q "^tmux_${i}.*(attached)$" <(tmux list-sessions 2>/dev/null); then
+            exec tmux new -A -s tmux_${i}
+            break
+        elif [[ ${i} == 10 ]]; then 
+            echo "Refusing to start more than 10 tmux sessions!"
+        fi
+    done
+fi
+
 export PATH=/opt/homebrew/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export ZSH="$HOME/.oh-my-zsh"
 # Set truecolor mode for micro
 export MICRO_TRUECOLOR=1
 export COLORTERM=truecolor
-
-if [[ -z "$TMUX" && ($(env) =~ "SSH_CLIENT" || $(env) =~ "SSH_CONNECTION" || $(env) =~ "SSH_TTY") ]]; then
-    tmux -V && tmux new -A -s default
-fi
 
 # Alias/Function definitions
 source ~/.functions
@@ -31,7 +46,6 @@ elif [[ $(uname) == "Darwin" ]]; then
     alias psm="ps axeo user,comm,pmem | (read -r; printf "%s\n" "$REPLY"; sort -nk3)"
     alias psc="ps axeo user,comm,pcpu | (read -r; printf "%s\n" "$REPLY"; sort -nk3)"
     brew -v  &> /dev/null || bootstrap::get_brew && eval "$(brew shellenv)"
-    
 fi
 
 zstyle ":omz:update" mode reminder
