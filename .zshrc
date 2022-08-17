@@ -4,7 +4,7 @@ export ZSH="$HOME/.oh-my-zsh"
 export MICRO_TRUECOLOR=1
 export COLORTERM=truecolor
 
-if [[ $(env) =~ "SSH_CLIENT" || $(env) =~ "SSH_CONNECTION" || $(env) =~ "SSH_TTY" ]]; then
+if [[ -z "$TMUX" && ($(env) =~ "SSH_CLIENT" || $(env) =~ "SSH_CONNECTION" || $(env) =~ "SSH_TTY") ]]; then
     tmux -V && tmux new -A -s default
 fi
 
