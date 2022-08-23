@@ -48,8 +48,7 @@ elif [[ $(uname) == "Darwin" ]]; then
     brew -v  &> /dev/null || bootstrap::get_brew && eval "$(brew shellenv)"
 fi
 
-zstyle ":omz:update" mode reminder
-zstyle ":omz:update" frequency 13
+zstyle ":omz:update" mode disabled
 setopt extended_history
 setopt share_history
 setopt hist_ignore_all_dups
