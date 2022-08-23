@@ -67,6 +67,7 @@ plugins=(
     pip
     python
     zsh-syntax-highlighting
+    poetry
 )
 
 # Check for local overrides
