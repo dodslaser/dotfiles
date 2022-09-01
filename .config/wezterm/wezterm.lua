@@ -1,19 +1,16 @@
 local wezterm = require 'wezterm'
 local gui = wezterm.gui
-local dracula_custom, _ = wezterm.color.load_scheme(
-    wezterm.config_dir .. '/colors/dracula.toml'
-)
+local dracula_custom, _ = wezterm.color.load_scheme(wezterm.config_dir .. '/colors/dracula.toml')
+
 dracula_custom.selection_fg = '#282a36'
 dracula_custom.selection_bg = '#f8f8f2'
 
-if gui
+
+if(gui.screens()['main']['height'] <= 1440)
 then
-    if(gui.screens()['main']['height'] > 1440)
-    then
-        font_size = 11
-    else
-        font_size = 10
-    end
+    font_size = 9
+else
+    font_size = 11
 end
 
 return {
@@ -27,7 +24,7 @@ return {
     },
     color_scheme = 'Dracula (Custom)',
     enable_scroll_bar = true,
-    tab_bar_at_bottom = true,
+    tab_bar_at_bottom = false,
     use_fancy_tab_bar = false,
     warn_about_missing_glyphs = false,
     default_cursor_style = "BlinkingUnderline",
@@ -46,4 +43,3 @@ return {
         },
     },
 }
-
