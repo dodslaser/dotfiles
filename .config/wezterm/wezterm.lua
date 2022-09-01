@@ -5,7 +5,6 @@ local dracula_custom, _ = wezterm.color.load_scheme(wezterm.config_dir .. '/colo
 dracula_custom.selection_fg = '#282a36'
 dracula_custom.selection_bg = '#f8f8f2'
 
-
 if(gui.screens()['main']['height'] <= 1440)
 then
     font_size = 9
