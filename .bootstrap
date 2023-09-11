@@ -81,7 +81,7 @@ bootstrap::get_homebrew () (
 bootstrap::get_mpv () (
     echo "Installing mpv ..."
         if ! [[ -z "${_dlcmd}" ]]; then
-            _mpv_release="https://github.com/mpv-player/mpv/archive/refs/tags/v0.34.1.tar.gz"
+            _mpv_release="https://github.com/mpv-player/mpv/archive/refs/tags/v0.36.0.tar.gz"
             _libsixel_release="https://github.com/saitoha/libsixel/releases/download/v1.8.6/libsixel-1.8.6.tar.gz"
             _tmpdir=$(mktemp -d)
             _build_libs="${_tmpdir}/build-libs"
@@ -105,7 +105,7 @@ bootstrap::get_mpv () (
                 ./waf configure --enable-sixel --prefix="${HOME}/.local" &&
                 ./waf build --jobs ${_n_cores} &&
                 ./waf install
-            ) &> /dev/null || echo "Unable to install mpv"
+            ) || echo "Unable to install mpv"
             /bin/rm -r "$_tmpdir"
         else
             echo "No download method available"
@@ -115,7 +115,7 @@ bootstrap::get_mpv () (
 bootstrap::get_yt_dlp () (
     echo "Installing yt-dlp to ${HOME}/.local/bin ..."
     if ! [[ -z "${_dlcmd}" ]]; then
-        _release="https://github.com/yt-dlp/yt-dlp/releases/download/2022.07.18/yt-dlp"
+        _release="https://github.com/yt-dlp/yt-dlp/releases/download/2023.07.06/yt-dlp"
         (
             mkdir -p "${HOME}/.local/bin/" &&
             eval "${_dlcmd} ${_release} -o ${HOME}/.local/bin/yt-dlp" &&
@@ -129,7 +129,7 @@ bootstrap::get_yt_dlp () (
 bootstrap::get_ytfzf () (
     echo "Installing ytfzf ..."
     if ! [[ -z "${_dlcmd}" ]]; then
-        _release="https://github.com/pystardust/ytfzf/archive/refs/tags/v2.4.1.tar.gz"
+        _release="https://github.com/pystardust/ytfzf/archive/refs/tags/v2.6.0.tar.gz"
         _tmpdir=$(mktemp -d)
         (
             mkdir -p "${HOME}/.local/bin" &&
